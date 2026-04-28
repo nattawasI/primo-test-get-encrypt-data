@@ -1,0 +1,5 @@
+export const CRYPTO_CONSTANTS = {
+  AES_ALGORITHM: 'aes-256-cbc',
+  RSA_PADDING: 'RSA_PKCS1_OAEP_PADDING',
+  RSA_HASH: 'sha256',
+};

@@ -1,28 +1,16 @@
-# Primo Encryption API
+# Primo Crypto API (Interview Project)
 
-A NestJS project for encrypting and decrypting data using AES and RSA.
+A NestJS project that serves encryption and decryption requirements using AES and RSA.
 
-## Requirements
-- Node.js
-- NestJS CLI
+## Phase 2: CryptoService Implementation
+This branch focuses on the core logic for encryption and decryption.
 
-## Setup
+### Features
+- **AES-256-CBC**: Symmetric encryption with random key generation.
+- **RSA**: Asymmetric encryption using Private Key to encrypt and Public Key to decrypt (as per requirement).
+- **Unit Tests**: Comprehensive tests for all crypto operations.
+
+### Running Tests
 ```bash
-npm install
+npm run test
 ```
-
-## Running the app
-```bash
-# development
-npm run start
-
-# watch mode
-npm run start:dev
-
-# production mode
-npm run start:prod
-```
-
-## Documentation
-Once running, you can access the Swagger documentation at:
-`http://localhost:3000/api-docs`

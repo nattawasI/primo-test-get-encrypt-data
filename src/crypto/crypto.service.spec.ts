@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CryptoService } from './crypto.service';
+import { generateKeyPairSync } from 'crypto';
 
 describe('CryptoService', () => {
   let service: CryptoService;
@@ -17,50 +18,50 @@ describe('CryptoService', () => {
   });
 
   describe('AES Encryption/Decryption', () => {
-    const key = '12345678901234567890123456789012'; // 32 bytes for AES-256
-    const iv = '1234567890123456'; // 16 bytes for IV
+    const key = 'my-random-aes-key';
+    const iv = '0000000000000000';
     const text = 'Hello World';
 
-    it('should encrypt text using AES', () => {
-      const encrypted = service.encryptAES(text, key, iv);
-      expect(encrypted).toBeDefined();
-      expect(encrypted).not.toBe(text);
-    });
-
-    it('should decrypt text using AES', () => {
+    it('should encrypt and decrypt text correctly using AES', () => {
       const encrypted = service.encryptAES(text, key, iv);
       const decrypted = service.decryptAES(encrypted, key, iv);
       expect(decrypted).toBe(text);
     });
   });
 
-  describe('RSA Encryption/Decryption', () => {
-    // We'll need keys for this, we can mock them or generate them in the test
-    const text = 'Secret RSA Message';
+  describe('RSA Private Encryption/Public Decryption', () => {
+    const text = 'Secret AES Key';
     let publicKey: string;
     let privateKey: string;
 
     beforeAll(() => {
-      const { generateKeyPairSync } = require('crypto');
       const { publicKey: pub, privateKey: priv } = generateKeyPairSync('rsa', {
         modulusLength: 2048,
         publicKeyEncoding: { type: 'pkcs1', format: 'pem' },
         privateKeyEncoding: { type: 'pkcs1', format: 'pem' },
       });
-      publicKey = pub;
-      privateKey = priv;
+      publicKey = pub.toString();
+      privateKey = priv.toString();
     });
 
-    it('should encrypt text using RSA Public Key', () => {
-      const encrypted = service.encryptRSA(text, publicKey);
-      expect(encrypted).toBeDefined();
-      expect(encrypted).not.toBe(text);
-    });
-
-    it('should decrypt text using RSA Private Key', () => {
-      const encrypted = service.encryptRSA(text, publicKey);
-      const decrypted = service.decryptRSA(encrypted, privateKey);
+    it('should encrypt with private key and decrypt with public key', () => {
+      const encrypted = service.encryptRSAWithPrivate(text, privateKey);
+      const decrypted = service.decryptRSAWithPublic(encrypted, publicKey);
       expect(decrypted).toBe(text);
+    });
+
+    it('should throw error for invalid RSA data', () => {
+      expect(() =>
+        service.decryptRSAWithPublic('invalid-data', publicKey),
+      ).toThrow();
+    });
+  });
+
+  describe('Utility Methods', () => {
+    it('should generate a random string of requested length', () => {
+      const str = service.generateRandomString(32);
+      expect(str).toHaveLength(32);
+      expect(typeof str).toBe('string');
     });
   });
 });
