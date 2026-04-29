@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { CryptoService } from './crypto/crypto.service';
 import { CryptoController } from './crypto/crypto.controller';
 
@@ -11,7 +9,7 @@ import { CryptoController } from './crypto/crypto.controller';
       isGlobal: true,
     }),
   ],
-  controllers: [AppController, CryptoController],
-  providers: [AppService, CryptoService],
+  controllers: [CryptoController],
+  providers: [CryptoService],
 })
 export class AppModule {}
